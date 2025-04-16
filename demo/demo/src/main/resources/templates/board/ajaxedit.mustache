@@ -1,0 +1,30 @@
+{{>board/top1}}
+<h1>ajax 글 등록</h1>
+<input name="id" type="hidden" id="id" value={{board.id}}>
+제목 <input type="text" name="title" id="title" value={{board.title}}> <br/>
+내용 <textarea name="content" id="content">{{board.content}}</textarea>  <br/>
+<button onclick="update_ok();">등록하기</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function update_ok() {
+        var obj = { "id":$("#id").val(), "title":$("#title").val(),
+                    "content":$("#content").val()};
+        $.ajax({
+            url:"/api/boards/{{board.id}}",
+            type:"PATCH",
+            headers:{'Content-Type':'application/json'},
+            data:JSON.stringify(obj),
+            dataType:"json",
+            success:function(data){
+                //alert(data.id);
+                location.href="/board/blist";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+
+{{>bottom}}

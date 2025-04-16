@@ -1,0 +1,19 @@
+{{>board/top1}}
+
+<table>
+    <tr>
+        <td>번호</td>
+        <td>제목</td>
+        <td>내용</td>
+    </tr>
+{{#boardlist}}
+    <tr>
+        <td>{{id}}</td>
+        <td><a href="/board/view/{{id}}">{{title}}</a></td>
+        <td><a href="/board/ajaxdelete/{{id}}">{{content}}</a></td>
+    </tr>
+{{/boardlist}}
+</table>
+
+
+{{>bottom}}

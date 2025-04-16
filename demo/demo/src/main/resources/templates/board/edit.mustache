@@ -1,0 +1,17 @@
+{{>board/top1}}
+
+<form method="post" action="/board/update">
+    <div class="text-bg-primary"><h1>정보 수정 페이지</h1></div>
+    <input name="id" type="hidden" value={{board.id}}>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">이메일</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="title" value={{board.title}}>
+    </div>
+    <div class="mb-2">
+        <label for="exampleInputAddress" class="form-label">주소</label>
+        <input type="text" class="form-control" id="exampleInputAddress" name="content" value={{board.content}}>
+    </div>
+    <button type="submit" class="btn btn-primary">수정하기</button>
+</form>
+
+{{>bottom}}

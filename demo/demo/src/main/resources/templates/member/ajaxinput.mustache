@@ -1,0 +1,39 @@
+{{>top}}
+<div class="text-bg-primary"><h1>회원가입 페이지(ajax)</h1></div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">이메일</label>
+    <input type="email" class="form-control" id="email" name="email">
+</div>
+<div class="mb-3">
+    <label for="exampleInputName" class="form-label">이름</label>
+    <input type="text" class="form-control" id="name" name="name">
+</div>
+<div class="mb-2">
+    <label for="exampleInputAddress" class="form-label">주소</label>
+    <input type="text" class="form-control" id="addr" name="addr">
+</div>
+<button onclick="add_ok();" class="btn btn-primary">회원가입</button>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function add_ok() {
+        var obj = { "email":$("#email").val(), "name":$("#name").val(),"addr":$("#addr").val()};
+        $.ajax({
+            url:"/api/members",
+            type:"POST",
+            headers:{'Content-Type':'application/json'},
+            data:JSON.stringify(obj),
+            dataType:"json",
+            success:function(data){
+                //alert(data.id);
+                location.href="/member/ajaxlist";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+
+{{>bottom}}

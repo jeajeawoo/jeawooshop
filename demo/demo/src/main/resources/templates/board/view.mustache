@@ -1,0 +1,19 @@
+{{>board/top1}}
+
+<table>
+    <tr>
+        <td>번호</td>
+        <td>제목</td>
+        <td>내용</td>
+    </tr>
+{{#boardview}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{title}}</td>
+            <td>{{content}}</td>
+        </tr>
+    </table>
+{{/boardview}}
+<a class="btn btn-outline-primary" href="/board/edit/{{boardview.id}}" role="button">정보수정</a>
+<a class="btn btn-outline-primary" href="/board/delete/{{boardview.id}}" role="button">삭제</a>
+{{>bottom}}

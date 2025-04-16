@@ -1,0 +1,32 @@
+{{>top}}
+<div class="container text-center bg-primary-subtle">
+    <div class="row ">
+        <div class="col border border-primary-subtle rounded-3">
+            이메일
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이름
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주소
+        </div>
+    </div>
+        <div class="row">
+            <div class="col border border-primary-subtle rounded-3">
+                {{memberview.email}}
+            </div>
+            <div class="col border border-primary-subtle rounded-3">
+                {{memberview.name}}
+            </div>
+            <div class="col border border-primary-subtle rounded-3">
+                {{memberview.addr}}
+            </div>
+
+        </div>
+    </div>
+<div class="btn-group" role="group" aria-label="Basic example">
+<a class="btn btn-outline-primary" href="/member/member_list" role="button">목록</a>
+<a class="btn btn-outline-primary" href="/member/edit/{{memberview.id}}" role="button">정보수정</a>
+<a class="btn btn-outline-primary" href="/member/delete/{{memberview.id}}" role="button">삭제</a>
+</div>
+{{>bottom}}

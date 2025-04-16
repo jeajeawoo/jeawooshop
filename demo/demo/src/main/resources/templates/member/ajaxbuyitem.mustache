@@ -1,0 +1,103 @@
+{{>top}}
+
+<div class="mb-3">
+    <input type="hidden" id="memberid" name="memberid" value="{{id}}">
+    상품명<input type="text" id="item" name="item" >
+    <button onclick="search();" class="btn btn-primary">검색하기</button>
+</div>
+{{#deletemessage}}
+    <div class="alert alert-primary" role="alert">
+        {{deletemessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/deletemessage}}
+<div id="ajax_buylist" class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            상품명
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주문날짜
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            삭제하기
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+    window.onload = function() {
+        let output = "";
+
+        $.ajax({
+            url:"/api/members/{{id}}/buy_items",
+            dataType:"json",
+            success:function(data){
+            for(var key in data) {
+                output += "<div class='row'>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].item+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].orderdate+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += "<a href='/member/{{id}}/ajaxdelete/"+data[key].id+"'>삭제</a></div>"
+                output += "</div>"
+                }
+                $("#ajax_buylist").append(output);
+                },error:function(xhr){
+                    alert(xhr.status);
+                }
+            });
+        }
+
+</script>
+<script>
+    function add_ok() {
+        var obj = {"memberid":$("#memberid").val(),"item":$("#item1").val()};
+        $.ajax({
+            url:"/api/members/{{id}}/buy_items",
+            type:"POST",
+            headers:{'Content-Type':'application/json'},
+            data:JSON.stringify(obj),
+            dataType:"json",
+            success:function(data){
+                //alert(data.item);
+                location.href="buyitem/"+data.item;
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+
+function search() {
+        $.ajax({
+            url:"/api/members/{{id}}/buy_items/item",
+            type:"GET",
+            dataType:"json",
+            success:function(data){
+                //alert(data.id);
+                location.href="orders/"+$("#item").val();
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+<a class="btn btn-outline-primary" href="/member/ajaxlist" role="button">목록</a>
+{{#message}}
+    <div class="alert alert-primary" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/message}}
+
+<div class="mb-3">
+    <input type="hidden" id="memberid" name="memberid" value="{{id}}">
+    상품명<input type="text" id="item1" name="item1">
+    <button onclick="add_ok();" class="btn btn-primary">주문하기</button>
+</div>
+
+
+{{>bottom}}

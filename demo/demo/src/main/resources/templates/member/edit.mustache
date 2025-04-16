@@ -1,0 +1,21 @@
+{{>top}}
+
+<form method="post" action="/member/update">
+    <div class="text-bg-primary"><h1>정보 수정 페이지</h1></div>
+    <input name="id" type="hidden" value={{member.id}}>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">이메일</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" value={{member.email}}>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">이름</label>
+        <input type="text" class="form-control" id="exampleInputName" name="name" value={{member.name}}>
+    </div>
+    <div class="mb-2">
+        <label for="exampleInputAddress" class="form-label">주소</label>
+        <input type="text" class="form-control" id="exampleInputAddress" name="addr" value={{member.addr}}>
+    </div>
+    <button type="submit" class="btn btn-primary">수정하기</button>
+</form>
+
+{{>bottom}}

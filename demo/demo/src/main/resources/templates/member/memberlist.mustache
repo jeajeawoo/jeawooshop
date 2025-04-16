@@ -1,0 +1,38 @@
+{{>top}}
+{{#message}}
+    <div class="alert alert-primary" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/message}}
+
+<div class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            이메일
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이름
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주소
+        </div>
+    </div>
+
+{{#memberlist}}
+    <div class="row">
+
+            <div class="col border border-primary-subtle rounded-3">
+                {{email}}
+            </div>
+            <div class="col border border-primary-subtle rounded-3">
+                <a href="/member/memberview/{{id}}"> {{name}} </a>
+            </div>
+            <div class="col border border-primary-subtle rounded-3">
+                {{addr}}
+            </div>
+    </div>
+{{/memberlist}}
+</div>
+<a class="btn btn-outline-primary" href="/member/input" role="button">회원등록</a>
+{{>bottom}}

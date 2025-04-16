@@ -1,0 +1,45 @@
+{{>top}}
+
+<div class="text-bg-primary"><h1>학생 등록(ajax)</h1></div>
+<div class="mb-3">
+    <label for="exampleInputName" class="form-label">이름</label>
+    <input type="text" class="form-control" id="name" name="name">
+</div>
+<div class="mb-3">
+    <label for="국어" class="form-label">국어</label>
+    <input type="text" class="form-control" id="국어" name="국어">
+</div>
+<div class="mb-2">
+    <label for="수학" class="form-label">수학</label>
+    <input type="text" class="form-control" id="수학" name="수학">
+</div>
+<div class="mb-3">
+    <label for="영어" class="form-label">영어</label>
+    <input type="text" class="form-control" id="영어" name="영어">
+</div>
+<button onclick="add_ok();" class="btn btn-primary">회원가입</button>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function add_ok() {
+        var obj = {  "name":$("#name").val(),"수학":$("#수학").val(),
+        "영어":$("#영어").val(),"국어":$("#국어").val()};
+        $.ajax({
+            url:"/api/students",
+            type:"POST",
+            headers:{'Content-Type':'application/json'},
+            data:JSON.stringify(obj),
+            dataType:"json",
+            success:function(data){
+                location.href="/student";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+
+
+{{>bottom}}

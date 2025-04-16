@@ -1,0 +1,43 @@
+{{>top}}
+<div id="ajax_buylist" class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            상품명
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주문날짜
+        </div>
+    </div>
+</div>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <a class="btn btn-outline-primary" href="/member/ajaxlist" role="button">목록</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+    window.onload = function() {
+        let output = "";
+
+        $.ajax({
+            url:"/api/members/{{id}}/buy_items/{{item}}",
+            dataType:"json",
+            success:function(data){
+            for(var key in data) {
+                output += "<div class='row'>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].item+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].orderdate+"</div>"
+                output += "</div>"
+                }
+                $("#ajax_buylist").append(output);
+                },error:function(xhr){
+                    alert(xhr.status);
+                }
+            });
+        }
+
+</script>
+
+{{>bottom}}

@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    window.onload = function() {
+        $.ajax({
+            url:"/api/members/buy_items/{{id}}",
+            type:"DELETE",
+            success:function(data){
+                location.href="/member/{{memberid}}/"+data.item+"/{{id}}";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+

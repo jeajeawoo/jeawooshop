@@ -1,0 +1,60 @@
+{{>top}}
+
+<div id="ajax_list" class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            아이디
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이메일
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이름
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주소
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주문내역
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+    window.onload = function() {
+        let output = "";
+
+        $.ajax({
+            url:"/api/members",
+            dataType:"json",
+            success:function(data){
+            for(var key in data) {
+                output += "<div class='row'>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].id+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].email+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += "<a href='/member/ajaxview/"+data[key].id+"'>"+data[key].name+"</a></div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].addr+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += "<a href='/member/"+data[key].id+"/buyitem'>주문내역</a></div>"
+                output += "</div>"
+
+
+                }
+                $("#ajax_list").append(output);
+                },error:function(xhr){
+                    alert(xhr.status);
+                }
+            });
+        }
+
+</script>
+<a class="btn btn-outline-primary" href="/member/ajaxinput" role="button">회원등록</a>
+
+{{>bottom}}

@@ -1,0 +1,60 @@
+{{>top}}
+<div id="ajax_list" class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            이메일
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이름
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            주소
+        </div>
+    </div>
+</div>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <a class="btn btn-outline-primary" href="/member/ajaxlist" role="button">목록</a>
+    <a class="btn btn-outline-primary" href="/member/ajaxedit/{{id}}" role="button">정보수정</a>
+    <a class="btn btn-outline-primary"  role="button" onclick="delete_ok();">회원삭제</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+    window.onload = function() {
+        let output = "";
+        $.ajax({
+            url:"/api/members/{{id}}",
+            dataType:"json",
+            success:function(data){
+                output += "<div class='row'>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data.email+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data.name+"</a></div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data.addr+"</div>"
+                output += "</div>"
+                $("#ajax_list").append(output);
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+
+</script>
+<script>
+    function delete_ok() {
+    $.ajax({
+        url:"/api/members/{{id}}",
+            type:"DELETE",
+            success:function(data){
+                //alert(data.id);
+                location.href="/member/ajaxlist";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+{{>bottom}}

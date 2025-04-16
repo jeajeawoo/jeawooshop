@@ -1,0 +1,83 @@
+{{>top}}
+{{#message}}
+    <div class="alert alert-primary" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/message}}
+<div id="ajax_list" class="container text-center bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="row">
+        <div class="col border border-primary-subtle rounded-3">
+            아이디
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            이름
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            국어
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            영어
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            수학
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            합계
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            평균
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            정보수정
+        </div>
+        <div class="col border border-primary-subtle rounded-3">
+            삭제
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+    window.onload = function() {
+        let output = "";
+
+        $.ajax({
+            url:"/api/students",
+            dataType:"json",
+            success:function(data){
+            for(var key in data) {
+                output += "<div class='row'>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].id+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].name+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].국어+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].영어+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += data[key].수학+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += (data[key].국어+data[key].영어+data[key].수학)+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += (data[key].국어+data[key].영어+data[key].수학)/3+"</div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += "<a href='/student/update/"+data[key].id+"'>정보수정</a></div>"
+                output += "<div class='col border border-primary-subtle rounded-3'>"
+                output += "<a href='/student/delete/"+data[key].id+"'>삭제</a></div>"
+                output += "</div>"
+
+
+                }
+                $("#ajax_list").append(output);
+                },error:function(xhr){
+                    alert(xhr.status);
+                }
+            });
+        }
+
+</script>
+<a class="btn btn-outline-primary" href="/student/insert" role="button">학생 등록</a>
+{{>bottom}}

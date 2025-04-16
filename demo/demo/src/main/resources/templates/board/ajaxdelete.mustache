@@ -1,0 +1,20 @@
+{{>board/top1}}
+<button onclick="add_ok();">aaa </button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function add_ok() {
+        $.ajax({
+            url:"/api/boards/{{id}}",
+            type:"DELETE",
+            success:function(data){
+                //alert(data.id);
+                location.href="/board/blist";
+            },error:function(xhr){
+                alert(xhr.status);
+            }
+        });
+    }
+</script>
+
+{{>bottom}}

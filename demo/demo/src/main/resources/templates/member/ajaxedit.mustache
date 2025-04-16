@@ -1,0 +1,42 @@
+{{>top}}
+
+    <div class="text-bg-primary"><h1>정보 수정 페이지</h1></div>
+    <input name="id" type="hidden" value={{member.id}}>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">이메일</label>
+        <input type="email" class="form-control" id="email" name="email" value={{member.email}}>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">이름</label>
+        <input type="text" class="form-control" id="name" name="name" value={{member.name}}>
+    </div>
+    <div class="mb-2">
+        <label for="exampleInputAddress" class="form-label">주소</label>
+        <input type="text" class="form-control" id="addr" name="addr" value={{member.addr}}>
+    </div>
+    <a class="btn btn-outline-primary"  role="button" onclick="update_ok();">정보수정</a>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    function update_ok() {
+        var obj = { "id":$("#id").val(), "email":$("#email").val(),
+                    "name":$("#name").val(),"addr":$("#addr").val()};
+        $.ajax({
+            url:"/api/members/{{member.id}}",
+            type:"PATCH",
+            headers:{'Content-Type':'application/json'},
+            data:JSON.stringify(obj),
+            dataType:"json",
+            success:function(data){
+                //alert(data.id);
+                location.href="/member/ajaxlist";
+            },error:function(xhr){
+                alert(xhr.status);
+
+            }
+        });
+    }
+</script>
+{{>bottom}}

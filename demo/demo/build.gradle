@@ -1,0 +1,51 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.1'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'spring-exam'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-mustache'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+	// javax.servlet 의존성 추가
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+
+	// Spring Boot Starter Security (Spring Security 의존성)
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Spring Boot Starter Validation (Optional: 데이터 유효성 검사)
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	// Spring Security Crypto (비밀번호 해시화를 위한 의존성)
+	implementation 'org.springframework.security:spring-security-crypto'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
