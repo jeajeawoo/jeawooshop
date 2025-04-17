@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggerAspect {
 
-    @Around("execution(* spring.exam.demo.controller..*(..))")
+    @Around("execution(* spring_exam.demo.controller..*(..))")
     public Object logpoint(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 메소드 이름

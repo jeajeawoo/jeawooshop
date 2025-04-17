@@ -50,7 +50,6 @@ public class MemberController {
     public ResponseEntity<?> logintoken(@RequestBody MemberDto memberDto){
         // 서비스 계층을 호출하여 로그인 인증 처리
         String token = memberService.authenticateMember(memberDto.getEmail(), memberDto.getPassword());
-        log.info(token+memberDto.getEmail());
         // 인증 성공: 토큰 반환
         if (token != null) {
             return ResponseEntity.ok(new AuthResponse(token)); // 토큰 반환
