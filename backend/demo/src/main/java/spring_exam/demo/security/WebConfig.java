@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 실제 파일이 저장된 경로를 사용해 정적 리소스를 처리
         String basePath = System.getProperty("user.dir"); // 현재 작업 디렉토리
-        String parentPath = Paths.get(basePath, "../item_img").toString();
+        String parentPath = Paths.get(basePath, "../../item_img").toString();
 
 
         registry.addResourceHandler("/images/**")

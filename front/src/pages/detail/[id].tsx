@@ -77,7 +77,6 @@ const Detail = () => {
           <h4>{shoes.title}</h4>
           <p>{shoes.content}</p>
           <p>{shoes.price}원</p>
-
             <Button
               variant="danger"
               onClick={() => {

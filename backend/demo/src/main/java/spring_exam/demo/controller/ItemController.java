@@ -24,9 +24,14 @@ public class ItemController {
 
     // 상품 목록 조회
     @GetMapping
-    public ResponseEntity<List<ItemResponseDto>> getItems() {
-        List<ItemResponseDto> items = itemService.getItem();
-        return ResponseEntity.ok(items); // 200 OK 응답
+    public ResponseEntity<?> getItems() {
+        try{
+            List<ItemResponseDto> items = itemService.getItem();
+            return ResponseEntity.ok(items); // 200 OK 응답
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+
     }
 
     // 상품 하나 조회
