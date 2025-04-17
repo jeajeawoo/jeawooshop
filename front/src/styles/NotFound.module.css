@@ -1,0 +1,59 @@
+/* 전체 레이아웃 */
+.notfoundContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 700px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: center;
+  }
+  
+  .notfoundContent {
+    margin-bottom: 20px;
+  }
+  
+  .notfoundtitle {
+    font-size: 100px;
+    font-weight: bold;
+    color: #ff6347; /* Tomato color */
+  }
+  
+  .notfoundmessage {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #666;
+  }
+  
+  .notfoundhomebtn {
+    font-size: 16px;
+    text-decoration: none;
+    background-color: #ff6347;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .notfoundhomebtn:hover {
+    background-color: #ff4500;
+  }
+  
+  .notfoundillustration img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .notfound-container {
+      flex-direction: column;
+    }
+  
+    .notfound-title {
+      font-size: 60px;
+    }
+  }
+  

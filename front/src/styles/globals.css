@@ -1,0 +1,14 @@
+
+  .start{
+    opacity: 0;
+  }
+  .end{
+    opacity: 1;
+    transition: all 1s;
+  }
+  body a {
+    text-decoration: none;
+    color: #282c34;
+  }
+  
+  
