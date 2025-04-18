@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import spring_exam.demo.dto.AuthResponse;
 import spring_exam.demo.dto.MemberDto;
+import spring_exam.demo.dto.MemberResponseDto;
 import spring_exam.demo.entity.Member;
 import spring_exam.demo.exception.InvalidUserDataException;
 import spring_exam.demo.exception.UserAlreadyExistsException;
@@ -25,14 +26,14 @@ public class MemberController {
     MemberService memberService;
 
     @GetMapping("/members")
-    public List<Member> apimember(){
-        List<Member> memberList = memberService.selectAllMember();
+    public List<MemberResponseDto> apimember(){
+        List<MemberResponseDto> memberList = memberService.selectAllMember();
         return memberList;
     }
     @PostMapping("/public/members")
     public ResponseEntity<?> apiinput(@RequestBody MemberDto memberdto){
         try{
-            Member member = memberService.inputMember(memberdto);
+            MemberResponseDto member = memberService.inputMember(memberdto);
             return ResponseEntity.status(HttpStatus.CREATED).body(member);
         } catch (UserAlreadyExistsException e){
             // 이미 존재하는 이메일로 회원가입을 시도하는 경우
@@ -60,12 +61,12 @@ public class MemberController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Member> getUserInfo(HttpServletRequest request) {
+    public ResponseEntity<MemberResponseDto> getUserInfo(HttpServletRequest request) {
 
         // preHandle에서 설정한 이메일 가져오기
         String email = (String) request.getAttribute("email");
 
-        Member member = memberService.selectUser(email);
+        MemberResponseDto member = memberService.selectUser(email);
 
         if (member==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -84,7 +85,7 @@ public class MemberController {
                                          @RequestBody MemberDto memberTo){
         String email = (String) request.getAttribute("email");
 
-        Member member = memberService.updateUser(email,memberTo);
+        MemberResponseDto member = memberService.updateUser(email,memberTo);
         log.info(member.toString());
         if (member==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -96,7 +97,7 @@ public class MemberController {
     public ResponseEntity<?> deleteUser(HttpServletRequest request){
         String email = (String) request.getAttribute("email");
 
-        Member member = memberService.deleteMember(email);
+        MemberResponseDto member = memberService.deleteMember(email);
         if (member != null) {
             // 사용자 삭제 성공 시 200 OK 반환
             return ResponseEntity.ok("이메일 " + email + "의 사용자가 삭제되었습니다.");

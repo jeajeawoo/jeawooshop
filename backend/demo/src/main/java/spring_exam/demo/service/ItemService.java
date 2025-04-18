@@ -11,11 +11,11 @@ import java.util.List;
 public interface ItemService {
     public List<ItemResponseDto> getItem();
 
-    public Item getItemById(Long itemId);
+    public ItemResponseDto getItemById(Long itemId);
 
-    public Item insertItem(ItemDto itemDto) throws IOException;
+    public ItemResponseDto insertItem(ItemDto itemDto) throws IOException;
 
-    public Item updateItemWithImage(Long itemId, ItemDto itemDto) throws IOException;
+    public ItemResponseDto updateItemWithImage(Long itemId, ItemDto itemDto) throws IOException;
 
     public void deleteItem(Long itemId);
 }

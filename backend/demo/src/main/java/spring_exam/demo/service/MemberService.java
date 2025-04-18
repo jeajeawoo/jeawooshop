@@ -1,22 +1,21 @@
 package spring_exam.demo.service;
 
 import spring_exam.demo.dto.MemberDto;
+import spring_exam.demo.dto.MemberResponseDto;
 import spring_exam.demo.entity.Member;
 
 import java.util.List;
 
 public interface MemberService {
-    public List<Member> selectAllMember();
+    public List<MemberResponseDto> selectAllMember();
 
-    public Member selectMember(String email);
+    public MemberResponseDto inputMember(MemberDto memberdto);
 
-    public Member inputMember(MemberDto memberdto);
-
-    public Member deleteMember(String email);
+    public MemberResponseDto deleteMember(String email);
 
     public String authenticateMember(String email, String password);
 
-    public Member selectUser(String email);
+    public MemberResponseDto selectUser(String email);
 
-    public Member updateUser(String email, MemberDto memberTo);
+    public MemberResponseDto updateUser(String email, MemberDto memberTo);
 }

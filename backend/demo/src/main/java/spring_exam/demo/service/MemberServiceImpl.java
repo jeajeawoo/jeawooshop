@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import spring_exam.demo.dto.MemberResponseDto;
 import spring_exam.demo.exception.InvalidUserDataException;
 import spring_exam.demo.security.JwtUtil;
 import spring_exam.demo.dto.MemberDto;
@@ -15,6 +16,7 @@ import spring_exam.demo.security.Role;
 import spring_exam.demo.util.PasswordValideator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,23 +32,16 @@ public class MemberServiceImpl implements MemberService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public Member selectMember(String email) {
-        Member member = memberRepository.findByEmail(email).orElse(null);
-        if (member==null){
-            log.info("잘못된 아이디"+email);
-            return null;
-        }
-        return member;
-    }
-
-    @Override
-    public List<Member> selectAllMember() {
+    public List<MemberResponseDto> selectAllMember() {
         List<Member> memberList = memberRepository.findAll();
-        return memberList;
+
+        return memberList.stream()
+                .map(MemberResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Member inputMember(MemberDto memberdto) {
+    public MemberResponseDto inputMember(MemberDto memberdto) {
         // 이메일 중복 체크
         if (memberRepository.existsByEmail(memberdto.getEmail())) {
             throw new UserAlreadyExistsException("Email already exists");
@@ -61,17 +56,21 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberdto.toEntity();
 
         member.setPassword(encodedPassword);
-
-        log.info(member.toString());
-
+        // 관리자 계정 생성 시 Role을 ADMIN으로 설정
+        if (memberdto.getEmail().equals("admin@naver.com")) {
+            member.setRole(Role.ROLE_ADMIN);
+        } else {
+            member.setRole(Role.ROLE_USER);  // 일반 사용자로 설정
+        }
         // 회원 저장
         Member saved = memberRepository.save(member);
-        return saved;
+        MemberResponseDto memberResponseDto = new MemberResponseDto(saved);
+        return memberResponseDto;
     }
 
 
     @Override
-    public Member deleteMember(String email) {
+    public MemberResponseDto deleteMember(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         if (member == null){
@@ -79,7 +78,8 @@ public class MemberServiceImpl implements MemberService {
             return null;
         }
         memberRepository.delete(member);
-        return member;
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+        return memberResponseDto;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member selectUser(String email) {
+    public MemberResponseDto selectUser(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -110,11 +110,13 @@ public class MemberServiceImpl implements MemberService {
             // 일반 사용자
             System.out.println("Regular user detected");
         }
-        return member;
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+
+        return memberResponseDto;
     }
 
     @Override
-    public Member updateUser(String email, MemberDto memberTo) {
+    public MemberResponseDto updateUser(String email, MemberDto memberTo) {
 
 
         // 이메일로 회원 조회
@@ -141,6 +143,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 변경된 회원 저장
         Member updatedMember = memberRepository.save(findMember);
-        return updatedMember;
+        MemberResponseDto memberResponseDto = new MemberResponseDto(updatedMember);
+        return memberResponseDto;
     }
 }

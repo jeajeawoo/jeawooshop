@@ -29,6 +29,7 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/public/**","/api/item/**","/images/**").permitAll()  // 공용 API 경로
                         .requestMatchers("/api/user/**").hasAuthority("ROLE_USER")  // ROLE_USER만 접근 가능
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated() // 나머지 경로는 인증 필요
 
                 )

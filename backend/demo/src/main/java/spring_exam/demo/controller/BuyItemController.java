@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring_exam.demo.dto.BuyItemDto;
+import spring_exam.demo.dto.MemberResponseDto;
 import spring_exam.demo.entity.Member;
 import spring_exam.demo.service.BuyItemService;
 import spring_exam.demo.service.MemberService;
@@ -25,7 +26,7 @@ public class BuyItemController {
     public ResponseEntity<List<BuyItemDto>> listmemeberbuyitem(HttpServletRequest request){
 
         String email = (String) request.getAttribute("email");
-        Member member = memberService.selectUser(email);
+        MemberResponseDto member = memberService.selectUser(email);
         List<BuyItemDto> buyItemDtoList = buyItemService.selectMemberBuyItem(member.getId());
         return ResponseEntity.status(HttpStatus.OK).body(buyItemDtoList);
     }
@@ -33,7 +34,7 @@ public class BuyItemController {
     public ResponseEntity<List<BuyItemDto>> insertmemberbuyitem(HttpServletRequest request,
                                                           @RequestBody List<BuyItemDto> buyItemDto){
         String email = (String) request.getAttribute("email");
-        Member member = memberService.selectUser(email);
+        MemberResponseDto member = memberService.selectUser(email);
         List<BuyItemDto> insertedMemberItem = buyItemService.insertMemberItem(member.getId(), buyItemDto);
         return ResponseEntity.status(HttpStatus.OK).body(insertedMemberItem);
     }

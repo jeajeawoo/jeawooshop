@@ -16,14 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("api/item")
+@RequestMapping("api")
 public class ItemController {
 
 
     private final ItemService itemService;
 
     // 상품 목록 조회
-    @GetMapping
+    @GetMapping("/item")
     public ResponseEntity<?> getItems() {
         try{
             List<ItemResponseDto> items = itemService.getItem();
@@ -35,39 +35,39 @@ public class ItemController {
     }
 
     // 상품 하나 조회
-    @GetMapping("/{itemId}")
-    public ResponseEntity<Item> getItem(@PathVariable("itemId") Long itemId) {
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<ItemResponseDto> getItem(@PathVariable("itemId") Long itemId) {
         try {
-            Item item = itemService.getItemById(itemId);
-            return ResponseEntity.ok(item); // 200 OK 응답과 상품 데이터 반환
+            ItemResponseDto itemResponseDto = itemService.getItemById(itemId);
+            return ResponseEntity.ok(itemResponseDto); // 200 OK 응답과 상품 데이터 반환
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<?> inputItemShop(@ModelAttribute ItemDto itemDto) {
         try {
-            Item savedItem = itemService.insertItem(itemDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedItem);
+            ItemResponseDto itemResponseDto = itemService.insertItem(itemDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(itemResponseDto);
         } catch (IOException e) {
             log.error("이미지 업로드 중 오류 발생", e); // 로그 찍기
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
         }
     }
-    @PutMapping("/{itemId}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long itemId, @ModelAttribute ItemDto itemDto) {
+    @PutMapping("/admin/{itemId}")
+    public ResponseEntity<ItemResponseDto> updateItem(@PathVariable Long itemId, @ModelAttribute ItemDto itemDto) {
         try {
-            Item updatedItem = itemService.updateItemWithImage(itemId, itemDto);
-            return ResponseEntity.ok(updatedItem); // 200 OK 응답과 수정된 상품 반환
+            ItemResponseDto itemResponseDto = itemService.updateItemWithImage(itemId, itemDto);
+            return ResponseEntity.ok(itemResponseDto); // 200 OK 응답과 수정된 상품 반환
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 400 BAD REQUEST
         }
     }
 
     // 상품 삭제
-    @DeleteMapping("/{itemId}")
+    @DeleteMapping("/admin/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
         try {
             itemService.deleteItem(itemId);

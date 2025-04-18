@@ -31,15 +31,18 @@ public class ItemServiceImpl implements ItemService {
 
     // 단일 아이템 조회
     @Transactional(readOnly = true)
-    public Item getItemById(Long itemId) {
-        return itemRepository.findById(itemId)
+    public ItemResponseDto getItemById(Long itemId) {
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없습니다."));
+        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
+
+        return itemResponseDto;
     }
 
     // 아이템 등록
     @Override
     @Transactional
-    public Item insertItem(ItemDto itemDto) throws IOException {
+    public ItemResponseDto insertItem(ItemDto itemDto) throws IOException {
         // 이미지 업로드 → 파일 저장하고 경로, 이름 반환
         ImgUtil.ImageInfo imageInfo = imgUtil.uploadItemImage(itemDto);
 
@@ -47,13 +50,14 @@ public class ItemServiceImpl implements ItemService {
         item.setOriginalImgName(imageInfo.getOriginalImgName());
         item.setStoredFilePath(imageInfo.getStoredFilePath());
         item.setFileSize(imageInfo.getFileSize());
-
-        return itemRepository.save(item);
+        itemRepository.save(item);
+        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
+        return itemResponseDto;
     }
 
     // 아이템 수정 (이미지 포함)
     @Transactional
-    public Item updateItemWithImage(Long itemId, ItemDto itemDto) throws IOException {
+    public ItemResponseDto updateItemWithImage(Long itemId, ItemDto itemDto) throws IOException {
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없습니다."));
 
@@ -66,8 +70,8 @@ public class ItemServiceImpl implements ItemService {
         existingItem.setOriginalImgName(imageInfo.getOriginalImgName());
         existingItem.setStoredFilePath(imageInfo.getStoredFilePath());
         existingItem.setFileSize(imageInfo.getFileSize());
-
-        return existingItem;
+        ItemResponseDto itemResponseDto = new ItemResponseDto(existingItem);
+        return itemResponseDto;
     }
 
     // 아이템 삭제

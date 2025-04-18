@@ -33,10 +33,12 @@ export default function CreateItemPage() {
     formData.append('file', file); 
 
     try {
+      const token = JSON.parse(sessionStorage.getItem("authToken") || "{}").token;
       // axios로 POST 요청 보내기
-      const response = await axios.post('http://localhost:8080/api/item', formData, {
+      const response = await axios.post('http://localhost:8080/api/admin', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // multipart/form-data 타입을 명시
+          'Authorization': `Bearer ${token}`,
         },
       });
   
