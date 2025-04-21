@@ -43,7 +43,7 @@ export default function CreateItemPage() {
       });
   
       // 성공적인 응답을 받았을 때 처리
-      console.log('상품 등록 성공', response.data);
+      alert(`상품 등록 성공, ${response.data.title}`);
   
     } catch (err: any) {
       // 오류 처리

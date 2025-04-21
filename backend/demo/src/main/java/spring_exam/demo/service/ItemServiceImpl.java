@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring_exam.demo.dto.ItemDto;
 import spring_exam.demo.dto.ItemResponseDto;
 import spring_exam.demo.entity.Item;
+import spring_exam.demo.mapstruct.ItemMapStruct;
 import spring_exam.demo.repository.ItemRepository;
 import spring_exam.demo.util.ImgUtil;
 
@@ -20,13 +21,12 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final ImgUtil imgUtil;
+    private final ItemMapStruct itemMapStruct;
 
     // 전체 아이템 리스트
     public List<ItemResponseDto> getItem() {
         List<Item> items = itemRepository.findAll();
-        return items.stream()
-                .map(ItemResponseDto::new)
-                .collect(Collectors.toList());
+        return itemMapStruct.toDtoList(items);
     }
 
     // 단일 아이템 조회
@@ -34,9 +34,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponseDto getItemById(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없습니다."));
-        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
 
-        return itemResponseDto;
+        return itemMapStruct.toDto(item);
     }
 
     // 아이템 등록
@@ -46,13 +45,13 @@ public class ItemServiceImpl implements ItemService {
         // 이미지 업로드 → 파일 저장하고 경로, 이름 반환
         ImgUtil.ImageInfo imageInfo = imgUtil.uploadItemImage(itemDto);
 
-        Item item = itemDto.toItemEntity(imageInfo);
+        Item item = itemMapStruct.toEntity(itemDto);
         item.setOriginalImgName(imageInfo.getOriginalImgName());
         item.setStoredFilePath(imageInfo.getStoredFilePath());
         item.setFileSize(imageInfo.getFileSize());
         itemRepository.save(item);
-        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
-        return itemResponseDto;
+
+        return itemMapStruct.toDto(item);
     }
 
     // 아이템 수정 (이미지 포함)
@@ -61,17 +60,26 @@ public class ItemServiceImpl implements ItemService {
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없습니다."));
 
-        existingItem.setTitle(itemDto.getTitle());
-        existingItem.setContent(itemDto.getContent());
-        existingItem.setPrice(itemDto.getPrice());
+        // ItemDto -> Item 엔티티 변환 (이미지 제외)
+        Item updatedItem = itemMapStruct.toEntity(itemDto);
 
-        // 새 이미지가 있다면 교체
+        // 새 이미지가 있다면 업로드하여 정보 세팅
         ImgUtil.ImageInfo imageInfo = imgUtil.uploadItemImage(itemDto);
-        existingItem.setOriginalImgName(imageInfo.getOriginalImgName());
-        existingItem.setStoredFilePath(imageInfo.getStoredFilePath());
-        existingItem.setFileSize(imageInfo.getFileSize());
-        ItemResponseDto itemResponseDto = new ItemResponseDto(existingItem);
-        return itemResponseDto;
+        updatedItem.setOriginalImgName(imageInfo.getOriginalImgName());
+        updatedItem.setStoredFilePath(imageInfo.getStoredFilePath());
+        updatedItem.setFileSize(imageInfo.getFileSize());
+
+        // 기존 아이템에서 값을 업데이트
+        existingItem.setTitle(updatedItem.getTitle());
+        existingItem.setContent(updatedItem.getContent());
+        existingItem.setPrice(updatedItem.getPrice());
+        existingItem.setOriginalImgName(updatedItem.getOriginalImgName());
+        existingItem.setStoredFilePath(updatedItem.getStoredFilePath());
+        existingItem.setFileSize(updatedItem.getFileSize());
+
+        Item savedItem = itemRepository.save(existingItem);
+
+        return itemMapStruct.toDto(savedItem);
     }
 
     // 아이템 삭제
@@ -79,8 +87,6 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없습니다."));
-
-        // (선택) 이미지 파일도 실제로 삭제하고 싶다면 imgUtil에서 파일 삭제 처리 가능
 
         itemRepository.delete(item);
     }

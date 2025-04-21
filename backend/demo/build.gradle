@@ -44,6 +44,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	// Spring Security Crypto (비밀번호 해시화를 위한 의존성)
 	implementation 'org.springframework.security:spring-security-crypto'
+
+	//mapstruct
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final' // MapStruct 의존성 추가
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final' // MapStruct의 코드 생성 관련
 }
 
 tasks.named('test') {

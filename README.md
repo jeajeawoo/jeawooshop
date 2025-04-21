@@ -47,16 +47,16 @@
 ## 📸 스크린샷
 ### 🛍️ 상품 목록
 
-![상품 목록](./item_img/item.png)
+![상품 목록](https://github.com/jeajeawoo/jeawooshop/blob/master/item_img/item.PNG)
 
 ### 📦 상품 상세
-![상품 상세](./item_img/detail.png)
+![상품 상세](https://github.com/jeajeawoo/jeawooshop/blob/master/item_img/detail.PNG)
 
 ### 🛒 장바구니
-![장바구니](./item_img/cart.png)
+![장바구니](https://github.com/jeajeawoo/jeawooshop/blob/master/item_img/cart.PNG)
 
 ### 🔐 로그인
-![로그인](./item_img/login.png)
+![로그인](https://github.com/jeajeawoo/jeawooshop/blob/master/item_img/login.PNG)
 
 ### 🧑‍💼 관리자 상품 등록
-![관리자 등록](./item_img/add-item.png)
+![관리자 등록](https://github.com/jeajeawoo/jeawooshop/blob/master/item_img/add-item.PNG)

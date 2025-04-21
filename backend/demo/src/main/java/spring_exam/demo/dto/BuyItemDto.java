@@ -19,14 +19,4 @@ public class BuyItemDto {
     private int price;
     private Long memberid;
 
-    public static BuyItemDto entityConvertDto(BuyItem buyItem){
-
-        return new BuyItemDto(buyItem.getId(),
-                buyItem.getItemTitle(),
-                buyItem.getOrderdate(),
-                buyItem.getQuantity(),
-                buyItem.getPrice(),
-                buyItem.getMember().getId());
-    }
-
 }

@@ -17,7 +17,7 @@ function Shoes({shoes,id}:ShoesProps){
 
 function Recent({ recent, shoes }: RecentProps) {
   const recentShoe = shoes.find(shoe => shoe.id === recent);
-
+  
   if (!recentShoe) return null;
 
   return (

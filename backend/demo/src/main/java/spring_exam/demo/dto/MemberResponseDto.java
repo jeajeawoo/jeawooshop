@@ -27,16 +27,4 @@ public class MemberResponseDto {
 
     private String extraAddress;
 
-    public MemberResponseDto(Member member) {
-        this.id= member.getId();
-        this.email = member.getEmail();
-        this.password = member.getPassword();
-        this.userName = member.getUserName();
-        this.age = member.getAge();
-        this.postcode = member.getPostcode();
-        this.address = member.getAddress();
-        this.detailAddress = member.getDetailAddress();
-        this.extraAddress = member.getExtraAddress();
-
-    }
 }

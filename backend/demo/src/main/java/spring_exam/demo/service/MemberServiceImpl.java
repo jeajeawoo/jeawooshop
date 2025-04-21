@@ -1,11 +1,14 @@
 package spring_exam.demo.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring_exam.demo.dto.MemberResponseDto;
 import spring_exam.demo.exception.InvalidUserDataException;
+import spring_exam.demo.mapstruct.MemberMapStruct;
 import spring_exam.demo.security.JwtUtil;
 import spring_exam.demo.dto.MemberDto;
 import spring_exam.demo.entity.Member;
@@ -18,26 +21,25 @@ import spring_exam.demo.util.PasswordValideator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    MemberRepository memberRepository;
 
-    @Autowired
-    JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final MemberMapStruct memberMapStruct;
 
     @Override
     public List<MemberResponseDto> selectAllMember() {
         List<Member> memberList = memberRepository.findAll();
 
-        return memberList.stream()
-                .map(MemberResponseDto::new)
-                .collect(Collectors.toList());
+        return memberMapStruct.toResponseDtoList(memberList);
     }
 
     @Override
@@ -56,6 +58,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberdto.toEntity();
 
         member.setPassword(encodedPassword);
+
         // 관리자 계정 생성 시 Role을 ADMIN으로 설정
         if (memberdto.getEmail().equals("admin@naver.com")) {
             member.setRole(Role.ROLE_ADMIN);
@@ -64,8 +67,8 @@ public class MemberServiceImpl implements MemberService {
         }
         // 회원 저장
         Member saved = memberRepository.save(member);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(saved);
-        return memberResponseDto;
+
+        return memberMapStruct.toResponseDto(saved);
     }
 
 
@@ -78,8 +81,8 @@ public class MemberServiceImpl implements MemberService {
             return null;
         }
         memberRepository.delete(member);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
-        return memberResponseDto;
+
+        return memberMapStruct.toResponseDto(member);
     }
 
     @Override
@@ -98,26 +101,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto selectUser(String email) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new MemberNotFoundException("User not found"));
 
-        // Role을 추출해서 사용할 수 있음
-        Role role = member.getRole();  // Role enum을 반환
-        // role을 문자열로 비교
-        if ("ROLE_ADMIN".equals(role)) {
-            // 관리자 권한을 가진 경우
+        Role role = member.getRole();
+
+        if (role == Role.ROLE_ADMIN) {
             System.out.println("Admin role detected");
         } else {
-            // 일반 사용자
             System.out.println("Regular user detected");
         }
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
 
-        return memberResponseDto;
+        return memberMapStruct.toResponseDto(member);
     }
 
     @Override
     public MemberResponseDto updateUser(String email, MemberDto memberTo) {
-
 
         // 이메일로 회원 조회
         Member findMember = memberRepository.findByEmail(email)
@@ -143,7 +141,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 변경된 회원 저장
         Member updatedMember = memberRepository.save(findMember);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(updatedMember);
-        return memberResponseDto;
+
+        return memberMapStruct.toResponseDto(updatedMember);
     }
 }
